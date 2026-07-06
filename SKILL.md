@@ -76,6 +76,57 @@ When helping a user apply the workaround:
 
 If the user's Codex installation does not expose model instructions or an override mechanism, stop and report that the workaround cannot be applied directly in that environment.
 
+## Transcript Breakdown Analyzer
+
+Use `scripts/analyze_reasoning_tokens.py` when the user wants a deterministic historical breakdown from Codex JSONL transcripts instead of a new live eval.
+
+The analyzer reads transcript metadata and usage events only. It does not write message text, user prompts, assistant responses, tool arguments, or transcript summaries.
+
+It supports:
+
+- recursive transcript directory scanning;
+- one row per model-call usage event;
+- session id, transcript path, timestamp, turn ordinal, call ordinal, model, effort, cwd, and token counters;
+- exact cluster detection for `516`, `1034`, and `1552` reasoning output tokens by default;
+- before/after grouping with an explicit timezone-aware cutoff timestamp;
+- `event` phase basis for event-time comparisons;
+- `session` phase basis for model-instructions override comparisons, because already-running sessions may have started before the override update;
+- CSV and JSON outputs.
+
+Example, Windows PowerShell:
+
+```powershell
+python .\scripts\analyze_reasoning_tokens.py `
+  --sessions "$HOME\.codex\sessions" `
+  --cutoff "2026-07-06T16:27:04+02:00" `
+  --phase-basis session `
+  --out-dir "$env:TEMP\reasoning-token-analysis"
+```
+
+Example, POSIX shell:
+
+```sh
+python ./scripts/analyze_reasoning_tokens.py \
+  --sessions "$HOME/.codex/sessions" \
+  --cutoff "2026-07-06T16:27:04+02:00" \
+  --phase-basis session \
+  --out-dir "/tmp/reasoning-token-analysis"
+```
+
+Outputs:
+
+- `reasoning-token-events.csv`: turn-by-turn usage events.
+- `reasoning-token-summary-by-model-phase.csv`: grouped model and before/after summary.
+- `reasoning-token-summary-by-model-effort-phase.csv`: grouped model, effort, and before/after summary.
+- `reasoning-token-sessions.csv`: per-session/model/phase summary.
+- `reasoning-token-summary.json`: deterministic machine-readable summary, including histograms.
+
+Interpretation guardrail:
+
+- Exact cluster hits in historical transcripts are metadata evidence, not a standalone proof of wrong answers.
+- For causal before/after comparison around the model-instructions workaround, prefer `--phase-basis session`.
+- Use the affected-state eval above when answer correctness is required.
+
 ## Source Extract
 
 The original report said:
@@ -98,5 +149,6 @@ Codex 5.5 reasoning-collapse workaround:
 - Workaround: use a model-instructions override copied from the base instructions with that entire final section removed.
 - Important: remove the whole section; smaller edits inside it were reportedly unreliable.
 - Diagnostic: run the 5-shot local Codex eval; if any wrong answer lands at 516, 1034, or 1552 reasoning output tokens, report affected.
+- Historical analysis: use `scripts/analyze_reasoning_tokens.py` with an explicit cutoff and `--phase-basis session` to summarize transcript reasoning-token distributions before and after the workaround.
 - Dependency note: this guidance is self-contained and does not require external artifacts, project files, repository state, or operating-system-specific paths.
 ```
