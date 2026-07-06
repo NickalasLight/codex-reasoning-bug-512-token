@@ -27,6 +27,37 @@ Important distinction:
 - The string may appear in later chat transcripts because it is discussed as evidence.
 - The checks above are specifically about whether the section is present in active base instructions, not whether the phrase appears in conversation/tool logs.
 
+## Maximum Reasoning Intervention Cutoff
+
+A later system-wide model-instructions intervention was added to test whether an explicit maximum-reasoning instruction changes future reasoning-token behavior.
+
+Cutoff for later analysis:
+
+- UTC: `2026-07-06T19:37:12Z`
+- Local: `2026-07-06T21:37:12+02:00`
+
+Current active override state at verification:
+
+- Model: `gpt-5.5`
+- Reasoning effort: `xhigh`
+- Override hash: `a54e1fea62f2c930f96721063eb8971e203f17881331bfb9032e5724792a5b83`
+- `Maximum Reasoning Intervention` section present: yes
+- `Intermediary updates` section present: no
+
+Public reference artifact:
+
+- [`evidence/max-reasoning-intervention-20260706/manifest.json`](evidence/max-reasoning-intervention-20260706/manifest.json)
+
+Recommended later analyzer command:
+
+```powershell
+python .\scripts\analyze_reasoning_tokens.py `
+  --sessions "<local-codex-sessions-dir>" `
+  --cutoff "2026-07-06T19:37:12Z" `
+  --phase-basis session `
+  --out-dir "<local-output-dir>"
+```
+
 ## Historical Transcript Metadata Check
 
 The historical check used the repo analyzer:

@@ -1,0 +1,17 @@
+{
+  "intervention": "maximum_reasoning_intervention",
+  "primary_cutoff_utc": "2026-07-06T19:37:12Z",
+  "primary_cutoff_local": "2026-07-06T21:37:12+02:00",
+  "utc_marker_verified_local": "2026-07-06T23:11:44+02:00",
+  "active_model": "gpt-5.5",
+  "active_reasoning_effort": "xhigh",
+  "active_override_sha256": "a54e1fea62f2c930f96721063eb8971e203f17881331bfb9032e5724792a5b83",
+  "active_override_contains_maximum_reasoning_intervention": true,
+  "active_override_contains_intermediary_updates": false,
+  "analysis_recommendation": {
+    "cutoff": "2026-07-06T19:37:12Z",
+    "phase_basis": "session",
+    "reason": "Codex model-instructions overrides are effectively session-scoped; sessions started before the cutoff may preserve earlier base instructions."
+  },
+  "public_note": "The active local model-instructions override was updated with a Maximum Reasoning Intervention section. This manifest records only public-safe metadata and hashes, not the full local instruction file."
+}
