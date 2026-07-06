@@ -106,6 +106,17 @@ Affected-state rule:
 - Affected: any run gives a wrong final answer and lands on `516`, `1034`, or `1552` reasoning output tokens.
 - Not affected: all runs either answer correctly or do not combine a wrong answer with one of those clustered reasoning counts.
 
+### Screenshot Summary
+
+Historical cutoff: before/after is based on session start relative to `2026-07-06T16:27:04+02:00` local time (`2026-07-06T14:27:04Z` UTC).
+
+| Historical Phase | Model | Calls | Mean Reasoning Tokens | Exact Cluster Hits | Cluster Hit Rate | 516 | 1034 | 1552 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| before cutoff | `gpt-5.5` | 4507 | 227.31 | 258 | 5.73% | 224 | 30 | 4 |
+| after cutoff | `gpt-5.5` | 2352 | 225.48 | 116 | 4.93% | 100 | 13 | 3 |
+
+Historical interpretation: average `gpt-5.5` reasoning-token use was essentially flat after the update, and exact 512-family cluster hits persisted.
+
 ### Benchmark Results
 
 | Run | Correct | Final Answer | Reasoning Output Tokens | Output Tokens | Cluster Hit |
@@ -162,4 +173,3 @@ Planned public-safe output:
 - outcome classification;
 - whether more reasoning likely would have helped;
 - short anonymized rationale with no raw user/assistant transcript text.
-
