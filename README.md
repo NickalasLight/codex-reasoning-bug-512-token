@@ -260,7 +260,73 @@ Follow-up interpretation:
 - The category composition changed more than the concern rate. Post-cutoff clustered hits were more often diagnostic/evidence turns and less often routine progress/status turns.
 - The larger pass flags more cases than the manual 10% audit because it uses rule-assisted labels and treats high-risk context conservatively.
 - The direction is consistent with the manual audit: the mitigation did not remove clustered hits from contexts where deeper reasoning appeared warranted.
+- The blind multi-reviewer audit below is stronger evidence for category labels and did not replicate this category-shift signal. Treat this section as an exploratory rule-assisted screen.
 - To test whether reasoning increased inside specific categories, a separate denominator pass would be needed: classify a sample of all turns by category, then compare mean/median reasoning tokens and cluster-hit rates per category before vs after.
+
+### Blind Multi-Reviewer Audit
+
+A simulated blind multi-reviewer audit was run on the same `122`-case larger sample. The goal was to reduce single-reviewer and rule-assisted-label bias.
+
+Protocol:
+
+- Three independent reviewer agents: `R1`, `R2`, `R3`.
+- Reviewers were spawned without this conversation context and were instructed not to inspect other reviewer outputs, the repo README, prior aggregate results, or answer-key files.
+- Reviewers received only a local rubric and a phase-blinded packet of anonymized case summaries.
+- Reviewers did not see before/after phase, prior labels, aggregate statistics, or each other's votes.
+- Public artifacts include aggregate counts and anonymized vote tables only. Raw transcript windows, reviewer rationales, prompts, tool outputs, local paths, usernames, and secrets are excluded.
+
+Public proof artifacts:
+
+- [`evidence/blind-review-20260706/blind-review-summary.md`](evidence/blind-review-20260706/blind-review-summary.md)
+- [`evidence/blind-review-20260706/blind-review-summary.json`](evidence/blind-review-20260706/blind-review-summary.json)
+- [`evidence/blind-review-20260706/blind-review-case-votes.csv`](evidence/blind-review-20260706/blind-review-case-votes.csv)
+- [`evidence/blind-review-20260706/blind-review-rubric.md`](evidence/blind-review-20260706/blind-review-rubric.md)
+- [`evidence/blind-review-20260706/audit-manifest.json`](evidence/blind-review-20260706/audit-manifest.json)
+
+#### Blind Audit Majority Concern Result
+
+`Concern` means the reviewer verdict was `yes` or `probably`. The table below uses reviewer-majority labels per case.
+
+| Phase | Sampled Hits | Majority Concern | Majority No Concern | No Majority | Majority Concern Rate |
+|---|---:|---:|---:|---:|---:|
+| before cutoff | 78 | 35 | 43 | 0 | 35/78 (44.9%) |
+| after cutoff | 44 | 22 | 21 | 1 | 22/44 (50.0%) |
+
+Rough before/after concern-rate check:
+
+- Fisher exact `p ~= 0.570`.
+- This does not show a meaningful before/after improvement.
+
+#### Blind Audit Agreement
+
+| Label Type | Pairwise Agreement | Fleiss Kappa |
+|---|---:|---:|
+| Concern | 0.811 | 0.626 |
+| Verdict | 0.770 | 0.604 |
+| Category | 0.694 | 0.606 |
+
+Interpretation:
+
+- Agreement is moderate to substantial for concern labels.
+- The reviewer-majority concern rate is lower than the rule-assisted screen but still high: `57/122` (`46.7%`) of sampled clustered hits had a majority `yes` or `probably` concern label.
+- Before/after remains flat or slightly worse after cutoff: `44.9%` before vs `50.0%` after.
+
+#### Blind Audit Category Check
+
+| Majority Category | Before | After |
+|---|---:|---:|
+| Diagnostic/evidence collection | 20 | 7 |
+| Routine progress/status or completed work | 18 | 11 |
+| Safety-critical or destructive operations | 5 | 2 |
+| Security, compliance, or secret-sensitive work | 14 | 11 |
+| Tooling/platform integration mistake or brittle orchestration | 17 | 11 |
+| No category majority | 4 | 2 |
+
+Rough category-mix check:
+
+- 2-by-k chi-square over majority category counts, excluding no-majority category cases: `chi^2 ~= 2.22`, `df = 4`, `p ~= 0.695`.
+- The blind audit does not support a meaningful category-composition shift.
+- This weakens the earlier rule-assisted category-shift finding. The robust finding is not category movement; it is persistence of concerning clustered hits after the mitigation.
 
 ## Fresh 5-Shot Benchmark Eval
 
@@ -333,11 +399,13 @@ Current evidence suggests:
 2. Historical `gpt-5.5` turns still show exact 512-family reasoning-token hits after the update.
 3. Mean `gpt-5.5` reasoning-token usage did not materially change after the update.
 4. The fresh 5-shot benchmark did not reproduce the strict failure mode.
-5. The remaining concern is normal agent turns that terminate at exact 512-family counts, especially where a fuller reasoning pass may have been needed to succeed.
+5. Manual, rule-assisted, and blind multi-reviewer audits all fail to show a meaningful before/after improvement in concerning clustered hits.
+6. The blind multi-reviewer audit does not replicate the earlier rule-assisted category-shift signal.
+7. The remaining concern is normal agent turns that terminate at exact 512-family counts, especially where a fuller reasoning pass may have been needed to succeed.
 
 ## Further Evidence Work
 
-Useful follow-up work would be a blinded multi-reviewer audit of anonymized row summaries from the same historical 512-family population. The goal would be to reduce single-reviewer bias and separate task-mix changes from the suspected token-collapse behavior.
+Useful follow-up work would be a denominator pass over all sampled turns, not only clustered hits. That would classify a phase-balanced sample of all turns by category, then compare mean/median reasoning tokens and cluster-hit rates per category before vs after.
 
 Planned public-safe output:
 
@@ -347,4 +415,4 @@ Planned public-safe output:
 - task category;
 - outcome classification;
 - whether more reasoning likely would have helped;
-- short anonymized rationale with no raw user/assistant transcript text.
+- no raw user/assistant transcript text.

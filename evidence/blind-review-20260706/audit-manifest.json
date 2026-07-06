@@ -1,0 +1,15 @@
+{
+  "audit_date_local": "2026-07-06",
+  "case_count": 122,
+  "reviewer_count": 3,
+  "reviewer_labels": [
+    "R1",
+    "R2",
+    "R3"
+  ],
+  "packet_sha256": "275c7f68e09f40be965edcf71e09e89d614c70dc30d756716457f6299fb7d080",
+  "private_answer_key_sha256": "ec2db95475e68e2936d1f51bad3890af74d39b56979105d39347d481811769cd",
+  "public_summary_sha256": "88bd58222df248ea367337112aed89d507ec245a051324513ff5c2eb622fba6c",
+  "public_case_votes_sha256": "21abbd4edec5ee9003286a5c54132c91cf9464fa0410a361adc08f5ab79acf04",
+  "note": "Packet and answer key were local-only because they derive from transcript windows; public files contain aggregate counts and anonymized votes only."
+}

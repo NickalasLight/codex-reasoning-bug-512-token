@@ -1,0 +1,136 @@
+{
+  "agreement": {
+    "category_fleiss_kappa": 0.6063457918795375,
+    "category_pairwise": 0.6939890710382514,
+    "concern_fleiss_kappa": 0.6258888362171128,
+    "concern_pairwise": 0.8114754098360656,
+    "verdict_fleiss_kappa": 0.6042632066728449,
+    "verdict_pairwise": 0.7704918032786885
+  },
+  "by_reviewer": {
+    "R1": {
+      "category_counts": {
+        "diagnostic/evidence collection": 25,
+        "other/unclear": 2,
+        "routine progress/status or completed work": 25,
+        "safety-critical or destructive operations": 8,
+        "security, compliance, or secret-sensitive work": 32,
+        "tooling/platform integration mistake or brittle orchestration": 30
+      },
+      "concern_counts": {
+        "concern": 59,
+        "no_concern": 61,
+        "unclear": 2
+      },
+      "rows": 122,
+      "verdict_counts": {
+        "no": 61,
+        "probably": 46,
+        "unclear": 2,
+        "yes": 13
+      }
+    },
+    "R2": {
+      "category_counts": {
+        "diagnostic/evidence collection": 28,
+        "routine progress/status or completed work": 18,
+        "safety-critical or destructive operations": 6,
+        "security, compliance, or secret-sensitive work": 23,
+        "tooling/platform integration mistake or brittle orchestration": 47
+      },
+      "concern_counts": {
+        "concern": 53,
+        "no_concern": 69
+      },
+      "rows": 122,
+      "verdict_counts": {
+        "no": 69,
+        "probably": 37,
+        "yes": 16
+      }
+    },
+    "R3": {
+      "category_counts": {
+        "diagnostic/evidence collection": 28,
+        "routine progress/status or completed work": 36,
+        "safety-critical or destructive operations": 10,
+        "security, compliance, or secret-sensitive work": 24,
+        "tooling/platform integration mistake or brittle orchestration": 24
+      },
+      "concern_counts": {
+        "concern": 60,
+        "no_concern": 62
+      },
+      "rows": 122,
+      "verdict_counts": {
+        "no": 62,
+        "probably": 51,
+        "yes": 9
+      }
+    }
+  },
+  "case_count": 122,
+  "majority_counts": {
+    "category": {
+      "diagnostic/evidence collection": 27,
+      "no_majority": 6,
+      "routine progress/status or completed work": 29,
+      "safety-critical or destructive operations": 7,
+      "security, compliance, or secret-sensitive work": 25,
+      "tooling/platform integration mistake or brittle orchestration": 28
+    },
+    "concern": {
+      "concern": 57,
+      "no_concern": 64,
+      "no_majority": 1
+    },
+    "verdict": {
+      "no": 64,
+      "no_majority": 2,
+      "probably": 45,
+      "yes": 11
+    }
+  },
+  "phase_category_counts": {
+    "after": {
+      "diagnostic/evidence collection": 7,
+      "no_majority": 2,
+      "routine progress/status or completed work": 11,
+      "safety-critical or destructive operations": 2,
+      "security, compliance, or secret-sensitive work": 11,
+      "tooling/platform integration mistake or brittle orchestration": 11
+    },
+    "before": {
+      "diagnostic/evidence collection": 20,
+      "no_majority": 4,
+      "routine progress/status or completed work": 18,
+      "safety-critical or destructive operations": 5,
+      "security, compliance, or secret-sensitive work": 14,
+      "tooling/platform integration mistake or brittle orchestration": 17
+    }
+  },
+  "phase_counts": {
+    "after": {
+      "concern": 22,
+      "no_concern": 21,
+      "no_majority": 1,
+      "sampled": 44
+    },
+    "before": {
+      "concern": 35,
+      "no_concern": 43,
+      "sampled": 78
+    }
+  },
+  "reviewers": [
+    "R1",
+    "R2",
+    "R3"
+  ],
+  "rough_tests": {
+    "majority_category_chi_square": 2.2218384370765327,
+    "majority_category_chi_square_df": 4,
+    "majority_category_chi_square_p": 0.6950331634779923,
+    "majority_concern_fisher_exact_p": 0.5701439626421162
+  }
+}
