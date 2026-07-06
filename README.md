@@ -108,6 +108,54 @@ Today-only interpretation:
 - The observable today-only before/after comparison is effectively `gpt-5.5`, plus post-cutoff `gpt-5.3-codex-spark`.
 - The attempted mitigation targeted `gpt-5.5`; this slice does not show evidence that `gpt-5.4` or `gpt-5.4-mini` were affected by the change.
 
+### Manual Ground-Truth Sample of 512-Family Hits
+
+To test whether exact 512-family hits were merely harmless progress turns or cases where the agent likely should have reasoned deeper, a deterministic random sample was manually reviewed.
+
+Sampling frame:
+
+- Model: `gpt-5.5`
+- Cluster values: `516`, `1034`, `1552`
+- Phase basis: session start relative to `2026-07-06T16:27:04+02:00` local time (`2026-07-06T14:27:04Z` UTC)
+- Population: `258` before-cutoff hits and `139` after-cutoff hits
+- Sample rule: deterministic stratified random sample, `ceil(10%)` per phase
+- Sample size: `26` before-cutoff hits and `14` after-cutoff hits
+- Review basis: local transcript windows around each hit
+- Public redaction: no raw transcript text, prompts, secrets, private paths, usernames, or tool outputs are included here
+
+Classification definitions:
+
+- `yes`: the local evidence showed an avoidable mistake, failure, or unsafe/under-reasoned handling where deeper reasoning was likely needed.
+- `probably`: the turn involved safety, compliance, destructive operations, or complex integration where deeper reasoning was likely warranted, even if no definitive error was visible in the local window.
+- `no`: the hit was attached to a routine status/progress/update turn, or the nearby work appeared complete and adequately handled.
+- `unclear`: the local window was insufficient for a defensible judgment.
+
+#### Manual Review Results
+
+| Phase | Population Hits | Sampled Hits | No | Probably | Yes | Unclear | Yes + Probably Rate |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| before cutoff | 258 | 26 | 20 | 4 | 2 | 0 | 23.1% |
+| after cutoff | 139 | 14 | 10 | 3 | 0 | 1 | 21.4% |
+| combined | 397 | 40 | 30 | 7 | 2 | 1 | 22.5% |
+
+#### Categories Where More Reasoning Was Likely Useful
+
+| Category | Before | After | Total | Notes |
+|---|---:|---:|---:|---|
+| Safety-critical or destructive operations | 1 | 3 | 4 | OS install/partitioning, first-boot bootstrap, or live database deletion planning. These turns were not necessarily wrong, but the risk profile warranted deeper reasoning than a clustered trace suggests. |
+| Security, compliance, or secret-sensitive work | 3 | 0 | 3 | Dating-platform/legal planning, non-API retrieval discussion, and secret-bearing API workflow. These needed stronger policy and data-handling reasoning. |
+| Tooling/platform integration mistake or brittle orchestration | 2 | 0 | 2 | Cases where nearby evidence showed shell/platform mismatch or failed integration handling that deeper reasoning likely could have prevented or recovered from better. |
+| Complex progress turn with insufficient local evidence | 0 | 1 | 1 | The local window was too thin to call it a failure, but the task was complex enough to remain suspicious. |
+| Routine progress/status or completed work | 20 | 10 | 30 | Most sampled hits were not obvious failures; they often landed on progress updates, status reports, or already-completed work. |
+
+Manual-review interpretation:
+
+- The before/after sampled rates are very close: `23.1%` before vs `21.4%` after for `yes + probably`.
+- The sample does not show a meaningful improvement in whether clustered turns needed deeper reasoning after the instruction-section removal.
+- The after-cutoff sample had no definite `yes` cases, but the sample is small and task mix changed; this should not be read as proof of a fix.
+- The most defensible signal is categorical: clustered traces are often harmless progress/status turns, but a non-trivial minority occur on turns where deeper reasoning was likely warranted.
+- The attempted mitigation did not eliminate that minority pattern.
+
 ## Fresh 5-Shot Benchmark Eval
 
 Command shape:
