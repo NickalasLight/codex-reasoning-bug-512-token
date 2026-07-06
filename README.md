@@ -224,12 +224,43 @@ Follow-up sampling frame:
 | Tooling/platform integration mistake or brittle orchestration | 9 | 1 | 10 | 0 | 0 | 10 | 0 | 10/10 (100.0%) | 10/122 (8.2%) |
 | **Total** | **78** | **44** | **122** | **31** | **49** | **16** | **26** | **65/122 (53.3%)** | **122/122 (100.0%)** |
 
+#### Larger Follow-Up Category-Shift Check
+
+The larger follow-up answers two different questions:
+
+1. Did the share of concerning clustered hits change after the mitigation?
+2. Did the category mix of clustered hits change after the mitigation?
+
+The answer is different for each question. The concerning-hit share did not meaningfully change, but the category composition did shift.
+
+Rough statistical checks:
+
+- Concern-rate check: `yes + probably` before vs after is `41/78` (`52.6%`) vs `24/44` (`54.5%`), Fisher exact `p ~= 0.85`.
+- Overall category-mix check: 2-by-5 chi-square over category counts gives `chi^2 ~= 12.52`, `df = 4`, `p ~= 0.014`.
+- These p-values are rough screening checks, not a formal causal model. The larger pass is rule-assisted, categories are coarse, and the category tests are not independent of task mix.
+
+| Category | Before Share | After Share | Change | Rough p-value | Finding |
+|---|---:|---:|---:|---:|---|
+| Diagnostic/evidence collection | 14/78 (17.9%) | 18/44 (40.9%) | +23.0 pp | `p ~= 0.009` | Strongest observed category increase; likely real in this sample, but still task-mix-sensitive. |
+| Routine progress/status or completed work | 25/78 (32.1%) | 6/44 (13.6%) | -18.4 pp | `p ~= 0.030` | Moderate observed decrease; suggestive uncorrected, weaker after conservative multiple-comparison correction. |
+| Tooling/platform integration mistake/brittle orchestration | 9/78 (11.5%) | 1/44 (2.3%) | -9.3 pp | `p ~= 0.093` | Directional decrease only; sample is too small for a firm finding. |
+| Security, compliance, or secret-sensitive work | 21/78 (26.9%) | 13/44 (29.5%) | +2.6 pp | `p ~= 0.83` | No meaningful category-share change detected. |
+| Safety-critical or destructive operations | 9/78 (11.5%) | 6/44 (13.6%) | +2.1 pp | `p ~= 0.78` | No meaningful category-share change detected. |
+
+Sample-size interpretation:
+
+- The larger sample is probably large enough to detect large composition shifts, especially the diagnostic/evidence increase.
+- It is not large enough to make strong claims about smaller categories such as tooling/platform mistakes or safety-critical turns.
+- It is large enough to rule out a large before/after improvement in the `yes + probably` concern rate for this sample, because that rate is nearly unchanged and the rough p-value is high.
+- The category-shift signal should not be interpreted as increased reasoning in those categories. This screen is conditioned on already-clustered hits; it does not include the denominator of all turns by category.
+
 Follow-up interpretation:
 
-- The larger screen also does not show improvement after the mitigation: `41/78` (`52.6%`) before vs `24/44` (`54.5%`) after for `yes + probably`.
+- The larger screen does not show a before/after improvement in concerning clustered hits: `41/78` (`52.6%`) before vs `24/44` (`54.5%`) after for `yes + probably`.
+- The category composition changed more than the concern rate. Post-cutoff clustered hits were more often diagnostic/evidence turns and less often routine progress/status turns.
 - The larger pass flags more cases than the manual 10% audit because it uses rule-assisted labels and treats high-risk context conservatively.
 - The direction is consistent with the manual audit: the mitigation did not remove clustered hits from contexts where deeper reasoning appeared warranted.
-- Category mix changed after the cutoff. The after-cutoff sample contains more diagnostic/evidence turns and fewer routine completions, so category-level before/after comparisons should be read as task-mix-dependent.
+- To test whether reasoning increased inside specific categories, a separate denominator pass would be needed: classify a sample of all turns by category, then compare mean/median reasoning tokens and cluster-hit rates per category before vs after.
 
 ## Fresh 5-Shot Benchmark Eval
 
