@@ -186,6 +186,51 @@ Manual-review interpretation:
 - The most defensible signal is categorical: clustered traces are often harmless progress/status turns, but a non-trivial minority occur on turns where deeper reasoning was likely warranted.
 - The attempted mitigation did not eliminate that minority pattern.
 
+### Larger 30% Follow-Up Screen
+
+After the manual 10% audit, a larger deterministic before/after screen was run to stress-test the category finding. This pass used the same transcript-window extraction approach and sampled `ceil(30%)` of clustered `gpt-5.5` hits per phase.
+
+Important caveat:
+
+- This larger pass is a rule-assisted sensitivity screen, not a replacement for the manual 10% ground-truth audit above.
+- It is intentionally more conservative about high-risk context than the manual audit.
+- Because additional local transcripts existed by the time this follow-up ran, the after-cutoff clustered-hit population had grown from `139` to `146`.
+
+Follow-up sampling frame:
+
+- Model: `gpt-5.5`
+- Cluster values: `516`, `1034`, `1552`
+- Phase basis: session start relative to `2026-07-06T16:27:04+02:00` local time (`2026-07-06T14:27:04Z` UTC)
+- Population: `258` before-cutoff hits and `146` after-cutoff hits
+- Sample rule: deterministic stratified random sample, `ceil(30%)` per phase
+- Sample size: `78` before-cutoff hits and `44` after-cutoff hits
+
+#### Larger Follow-Up Results
+
+| Phase | Population Hits | Sampled Hits | No | Probably | Yes | Unclear | Yes + Probably / Sample |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| before cutoff | 258 | 78 | 25 | 30 | 11 | 12 | 41/78 (52.6%) |
+| after cutoff | 146 | 44 | 6 | 19 | 5 | 14 | 24/44 (54.5%) |
+| combined | 404 | 122 | 31 | 49 | 16 | 26 | 65/122 (53.3%) |
+
+#### Larger Follow-Up By Category
+
+| Category | Before Sampled | After Sampled | Total Sampled | No | Probably | Yes | Unclear | Yes + Probably / Category Sample | Share of Follow-Up Sample |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Diagnostic/evidence collection | 14 | 18 | 32 | 0 | 0 | 6 | 26 | 6/32 (18.8%) | 32/122 (26.2%) |
+| Safety-critical or destructive operations | 9 | 6 | 15 | 0 | 15 | 0 | 0 | 15/15 (100.0%) | 15/122 (12.3%) |
+| Routine progress/status or completed work | 25 | 6 | 31 | 31 | 0 | 0 | 0 | 0/31 (0.0%) | 31/122 (25.4%) |
+| Security, compliance, or secret-sensitive work | 21 | 13 | 34 | 0 | 34 | 0 | 0 | 34/34 (100.0%) | 34/122 (27.9%) |
+| Tooling/platform integration mistake or brittle orchestration | 9 | 1 | 10 | 0 | 0 | 10 | 0 | 10/10 (100.0%) | 10/122 (8.2%) |
+| **Total** | **78** | **44** | **122** | **31** | **49** | **16** | **26** | **65/122 (53.3%)** | **122/122 (100.0%)** |
+
+Follow-up interpretation:
+
+- The larger screen also does not show improvement after the mitigation: `41/78` (`52.6%`) before vs `24/44` (`54.5%`) after for `yes + probably`.
+- The larger pass flags more cases than the manual 10% audit because it uses rule-assisted labels and treats high-risk context conservatively.
+- The direction is consistent with the manual audit: the mitigation did not remove clustered hits from contexts where deeper reasoning appeared warranted.
+- Category mix changed after the cutoff. The after-cutoff sample contains more diagnostic/evidence turns and fewer routine completions, so category-level before/after comparisons should be read as task-mix-dependent.
+
 ## Fresh 5-Shot Benchmark Eval
 
 Command shape:
@@ -259,9 +304,9 @@ Current evidence suggests:
 4. The fresh 5-shot benchmark did not reproduce the strict failure mode.
 5. The remaining concern is normal agent turns that terminate at exact 512-family counts, especially where a fuller reasoning pass may have been needed to succeed.
 
-## Next Evidence Pass
+## Further Evidence Work
 
-The next planned pass is an anonymized review of a random sample of historical 512-family hits. The goal is to classify whether each sampled turn likely needed more reasoning to succeed.
+Useful follow-up work would be a blinded multi-reviewer audit of anonymized row summaries from the same historical 512-family population. The goal would be to reduce single-reviewer bias and separate task-mix changes from the suspected token-collapse behavior.
 
 Planned public-safe output:
 
