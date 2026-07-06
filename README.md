@@ -87,6 +87,27 @@ Interpretation:
 - The cluster hit rate decreased slightly, but not enough to conclude the mitigation fixed the pattern.
 - This is metadata evidence only; it does not prove whether individual answers were correct or incorrect.
 
+### Today-Only Event-Time Slice
+
+This narrower slice includes only usage events that occurred on local date `2026-07-06`. The before/after phase still uses session start relative to the same cutoff: `2026-07-06T16:27:04+02:00` local time (`2026-07-06T14:27:04Z` UTC).
+
+| Phase | Model | Calls Today | Mean Reasoning Tokens | Exact Cluster Hits | Cluster Hit Rate | 516 | 1034 | 1552 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| before cutoff | `gpt-5.5` | 136 | 299.32 | 27 | 19.85% | 23 | 4 | 0 |
+| after cutoff | `gpt-5.5` | 2587 | 227.56 | 134 | 5.18% | 115 | 16 | 3 |
+| before cutoff | `gpt-5.4` | 0 | n/a | 0 | n/a | 0 | 0 | 0 |
+| after cutoff | `gpt-5.4` | 0 | n/a | 0 | n/a | 0 | 0 | 0 |
+| before cutoff | `gpt-5.4-mini` | 0 | n/a | 0 | n/a | 0 | 0 | 0 |
+| after cutoff | `gpt-5.4-mini` | 0 | n/a | 0 | n/a | 0 | 0 | 0 |
+| before cutoff | `gpt-5.3-codex-spark` | 0 | n/a | 0 | n/a | 0 | 0 | 0 |
+| after cutoff | `gpt-5.3-codex-spark` | 89 | 386.99 | 0 | 0.00% | 0 | 0 | 0 |
+
+Today-only interpretation:
+
+- `gpt-5.4` and `gpt-5.4-mini` had zero usage events in this local-date slice, so they do not provide before/after evidence for the instruction-section change.
+- The observable today-only before/after comparison is effectively `gpt-5.5`, plus post-cutoff `gpt-5.3-codex-spark`.
+- The attempted mitigation targeted `gpt-5.5`; this slice does not show evidence that `gpt-5.4` or `gpt-5.4-mini` were affected by the change.
+
 ## Fresh 5-Shot Benchmark Eval
 
 Command shape:
