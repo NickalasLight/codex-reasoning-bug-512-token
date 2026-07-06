@@ -1,5 +1,19 @@
 # Codex 5.5 Reasoning-Token Collapse Evidence
 
+## Contributing Analysis or Repo Updates
+
+Public pull requests are welcome. If you are not Nickalas Light and want to propose an update:
+
+1. Fork this repository and create a focused branch in your fork.
+2. Make the smallest reviewable change that captures your evidence, analysis, script fix, test, or documentation update.
+3. Do not commit raw private transcripts, prompts, assistant responses, tool arguments, local usernames, private paths, cookies, API keys, or customer/user data.
+4. Prefer public-safe aggregate evidence, anonymized tables, sanitized manifests, scripts, tests, or short reproducible notes.
+5. Include enough reproduction detail in the PR body: platform, Codex version if known, model, reasoning effort, command shape, JSONL/event fields inspected, and sanitized output or artifact paths.
+6. Run the relevant local tests or analyzer commands when possible. If you cannot run them, say exactly what was not run and why.
+7. Open the PR against `NickalasLight/codex-reasoning-bug-512-token:main`.
+
+You do not need direct write access to contribute. Maintainers will review public PRs before merging.
+
 Public-safe aggregate evidence for a suspected Codex 5.5 reasoning collapse pattern where some turns terminate around exact 512-family reasoning-token counts.
 
 This repository intentionally avoids raw transcript disclosure. The evidence below is anonymized to aggregate usage metadata: model, phase, call count, reasoning-token counts, and exact cluster counts. It excludes user prompts, assistant responses, tool arguments, local usernames, private paths, and raw transcript lines.
