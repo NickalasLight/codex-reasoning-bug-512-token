@@ -123,6 +123,18 @@ Sampling frame:
 - Review basis: local transcript windows around each hit
 - Public redaction: no raw transcript text, prompts, secrets, private paths, usernames, or tool outputs are included here
 
+Methodology:
+
+1. **Population construction.** Codex JSONL transcripts were scanned with `scripts/analyze_reasoning_tokens.py`. The analyzer emits usage metadata only and records one row per token-count event. Candidate rows were restricted to `model == gpt-5.5` and `reasoning_output_tokens in {516, 1034, 1552}`.
+2. **Phase assignment.** Before/after labels were assigned from session start time, not event time. This is the appropriate basis for an instruction-context intervention because already-running sessions may preserve the pre-change prompt even if later events occur after the wall-clock cutoff.
+3. **Stratification.** Sampling was stratified by phase so before and after cluster-hit populations were both represented. The before population had `258` eligible hits; the after population had `139` eligible hits.
+4. **Randomization.** Within each phase, eligible rows were sorted into a stable order, then shuffled with deterministic seed `51220260706:<phase>`. The sample size was `ceil(10%)` of each phase population, yielding `26` before-cutoff samples and `14` after-cutoff samples.
+5. **Review unit.** Each sampled row was reviewed as a local transcript window ending at the clustered token-count event. The reviewer considered nearby user intent, assistant response, tool calls, tool outputs, and whether the turn was substantive or merely a progress/status update.
+6. **Classification.** Each review unit received one mutually exclusive judgment: `no`, `probably`, `yes`, or `unclear`. `yes + probably` is treated as the primary concern signal because both indicate cases where the clustered trace likely under-served the task.
+7. **Category assignment.** Each reviewed row was assigned to a task category based on the nearby transcript window. Categories are intentionally coarse to avoid overfitting a small sample and to keep the public evidence anonymized.
+8. **Redaction policy.** The public table reports aggregate counts and ratios only. It excludes raw transcript text, prompts, assistant answers, command outputs, secrets, local paths, usernames, repository-private details, and exact row identifiers.
+9. **Limitations.** This is a single-reviewer qualitative audit of local transcript windows, not a blinded multi-rater study. It can identify plausible failure categories and before/after differences, but it cannot prove causal impact or correctness of every sampled turn.
+
 Classification definitions:
 
 - `yes`: the local evidence showed an avoidable mistake, failure, or unsafe/under-reasoned handling where deeper reasoning was likely needed.
@@ -132,22 +144,29 @@ Classification definitions:
 
 #### Manual Review Results
 
-| Phase | Population Hits | Sampled Hits | No | Probably | Yes | Unclear | Yes + Probably Rate |
+| Phase | Population Hits | Sampled Hits | No | Probably | Yes | Unclear | Yes + Probably / Sample |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| before cutoff | 258 | 26 | 20 | 4 | 2 | 0 | 23.1% |
-| after cutoff | 139 | 14 | 10 | 3 | 0 | 1 | 21.4% |
-| combined | 397 | 40 | 30 | 7 | 2 | 1 | 22.5% |
+| before cutoff | 258 | 26 | 20 | 4 | 2 | 0 | 6/26 (23.1%) |
+| after cutoff | 139 | 14 | 10 | 3 | 0 | 1 | 3/14 (21.4%) |
+| combined | 397 | 40 | 30 | 7 | 2 | 1 | 9/40 (22.5%) |
 
 #### Manual Review By Category
 
-| Category | Before Sampled | After Sampled | No | Probably | Yes | Unclear | Yes + Probably |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| Routine progress/status or completed work | 20 | 10 | 30 | 0 | 0 | 0 | 0 |
-| Safety-critical or destructive operations | 1 | 3 | 0 | 4 | 0 | 0 | 4 |
-| Security, compliance, or secret-sensitive work | 3 | 0 | 0 | 3 | 0 | 0 | 3 |
-| Tooling/platform integration mistake or brittle orchestration | 2 | 0 | 0 | 0 | 2 | 0 | 2 |
-| Complex progress turn with insufficient local evidence | 0 | 1 | 0 | 0 | 0 | 1 | 0 |
-| **Total** | **26** | **14** | **30** | **7** | **2** | **1** | **9** |
+| Category | Before Sampled | After Sampled | Total Sampled | No | Probably | Yes | Unclear | Yes + Probably / Category Sample | Share of All Sample |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| Routine progress/status or completed work | 20 | 10 | 30 | 30 | 0 | 0 | 0 | 0/30 (0.0%) | 30/40 (75.0%) |
+| Safety-critical or destructive operations | 1 | 3 | 4 | 0 | 4 | 0 | 0 | 4/4 (100.0%) | 4/40 (10.0%) |
+| Security, compliance, or secret-sensitive work | 3 | 0 | 3 | 0 | 3 | 0 | 0 | 3/3 (100.0%) | 3/40 (7.5%) |
+| Tooling/platform integration mistake or brittle orchestration | 2 | 0 | 2 | 0 | 0 | 2 | 0 | 2/2 (100.0%) | 2/40 (5.0%) |
+| Complex progress turn with insufficient local evidence | 0 | 1 | 1 | 0 | 0 | 0 | 1 | 0/1 (0.0%) | 1/40 (2.5%) |
+| **Total** | **26** | **14** | **40** | **30** | **7** | **2** | **1** | **9/40 (22.5%)** | **40/40 (100.0%)** |
+
+Finding from ratio context:
+
+- In raw sample terms, `9/40` reviewed cluster hits (`22.5%`) were classified as `yes` or `probably` needing deeper reasoning.
+- Before and after are nearly the same in-context: `6/26` (`23.1%`) before vs `3/14` (`21.4%`) after.
+- The category split shows why aggregate rates matter: most sampled cluster hits, `30/40` (`75.0%`), were routine progress/status or already-completed work, but the remaining suspicious categories had high within-category concern rates.
+- The strongest evidence is not that every 512-family hit is bad; it is that the mitigation did not remove a persistent minority of clustered hits in high-risk or complex contexts.
 
 #### Categories Where More Reasoning Was Likely Useful
 
