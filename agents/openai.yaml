@@ -1,4 +1,4 @@
 interface:
   display_name: "Codex Reasoning Bug 512 Token"
-  short_description: "Find Codex reasoning bug screenshot text"
-  default_prompt: "Use $codex-reasoning-bug-512-token to inspect the latest Downloads PNG for Codex reasoning-bug instructions and return only relevant external text."
+  short_description: "Diagnose and fix Codex 5.5 collapse"
+  default_prompt: "Use $codex-reasoning-bug-512-token to run the 5-shot Codex 5.5 affected-state eval and apply the workaround if needed."
