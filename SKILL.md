@@ -127,6 +127,69 @@ Interpretation guardrail:
 - For causal before/after comparison around the model-instructions workaround, prefer `--phase-basis session`.
 - Use the affected-state eval above when answer correctness is required.
 
+## Blind Multi-Reviewer Audit
+
+Use this workflow when the user wants a stronger qualitative audit of clustered hits than a single reviewer or rule-assisted category screen.
+
+The public repository includes reusable tooling:
+
+- `scripts/make_blind_review_packet.py`: builds a phase-blinded reviewer packet, local private answer key, rubric, and packet manifest from a private sampled-review JSON file.
+- `scripts/aggregate_blind_review.py`: validates independent reviewer JSONL outputs and aggregates majority labels, before/after concern rates, agreement statistics, and rough p-value checks.
+- `evidence/blind-review-20260706/`: public-safe example output from a three-reviewer simulated blind audit. It contains aggregate summaries, anonymized vote tables, a rubric, and a manifest, but not raw transcript windows.
+
+Privacy rule:
+
+- Do not commit the reviewer packet if it contains transcript-window excerpts.
+- Do not commit the private answer key if it reveals phase, transcript hashes, timestamps, or prior labels for blinded cases unless the user explicitly confirms it is public-safe.
+- Commit only aggregate outputs and anonymized vote tables by default.
+
+Packet generation example:
+
+```powershell
+python .\scripts\make_blind_review_packet.py `
+  --input "<local-private-review-json>" `
+  --out-dir "$env:TEMP\codex-512-blind-review" `
+  --seed "blind-review-YYYYMMDD"
+```
+
+This writes:
+
+- `blind-review-packet.jsonl`: phase-blinded reviewer input.
+- `blind-review-answer-key-private.json`: local-only mapping from blinded case ids to phase and original metadata.
+- `blind-review-rubric.md`: instructions for independent reviewers.
+- `blind-review-packet-manifest.json`: hashes and packet metadata.
+
+Reviewer instructions:
+
+1. Spawn each reviewer independently, with no shared context and no access to other reviewers' outputs.
+2. Give each reviewer only `blind-review-rubric.md` and `blind-review-packet.jsonl`.
+3. Tell each reviewer to write one JSONL object per case with `case_id`, `category`, `verdict`, `confidence`, and `rationale_public`.
+4. Forbid raw private text, paths, commands, secrets, exact transcript quotes, and transcript identifiers in reviewer rationales.
+5. Keep reviewer outputs separate until all reviewers finish.
+
+Aggregation example:
+
+```powershell
+python .\scripts\aggregate_blind_review.py `
+  --answer-key "$env:TEMP\codex-512-blind-review\blind-review-answer-key-private.json" `
+  --reviewer "R1=$env:TEMP\codex-512-blind-review\reviewer-r1.jsonl" `
+  --reviewer "R2=$env:TEMP\codex-512-blind-review\reviewer-r2.jsonl" `
+  --reviewer "R3=$env:TEMP\codex-512-blind-review\reviewer-r3.jsonl" `
+  --out-dir "$env:TEMP\codex-512-blind-review\aggregate"
+```
+
+Aggregation outputs:
+
+- `blind-review-summary.json`: public-safe aggregate counts and agreement metrics.
+- `blind-review-summary.md`: public-safe markdown summary.
+- `blind-review-case-votes.csv`: anonymized per-case vote table with blinded case ids, phase, token count, majority labels, and reviewer labels.
+
+Interpretation guardrail:
+
+- A blind audit can reduce single-reviewer and rule-assisted-label bias, but it is still qualitative.
+- A sample conditioned on clustered hits cannot prove reasoning increased or decreased within a category. To test category-specific reasoning allocation, classify a denominator sample of all turns by category and compare mean/median reasoning tokens plus cluster-hit rates before vs after.
+- Treat rough Fisher exact and chi-square p-values as screening checks, not causal proof.
+
 ## Source Extract
 
 The original report said:
@@ -150,5 +213,6 @@ Codex 5.5 reasoning-collapse workaround:
 - Important: remove the whole section; smaller edits inside it were reportedly unreliable.
 - Diagnostic: run the 5-shot local Codex eval; if any wrong answer lands at 516, 1034, or 1552 reasoning output tokens, report affected.
 - Historical analysis: use `scripts/analyze_reasoning_tokens.py` with an explicit cutoff and `--phase-basis session` to summarize transcript reasoning-token distributions before and after the workaround.
+- Blind audit: use `scripts/make_blind_review_packet.py` to create a phase-blinded packet, independent reviewers to label cases, and `scripts/aggregate_blind_review.py` to summarize majority labels and agreement.
 - Dependency note: this guidance is self-contained and does not require external artifacts, project files, repository state, or operating-system-specific paths.
 ```

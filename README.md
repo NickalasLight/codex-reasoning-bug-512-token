@@ -275,6 +275,11 @@ Protocol:
 - Reviewers did not see before/after phase, prior labels, aggregate statistics, or each other's votes.
 - Public artifacts include aggregate counts and anonymized vote tables only. Raw transcript windows, reviewer rationales, prompts, tool outputs, local paths, usernames, and secrets are excluded.
 
+Reusable audit tooling:
+
+- [`scripts/make_blind_review_packet.py`](scripts/make_blind_review_packet.py): creates a local phase-blinded reviewer packet, private answer key, rubric, and packet manifest.
+- [`scripts/aggregate_blind_review.py`](scripts/aggregate_blind_review.py): validates independent reviewer JSONL outputs and produces public-safe aggregate summaries, agreement metrics, and anonymized vote tables.
+
 Public proof artifacts:
 
 - [`evidence/blind-review-20260706/blind-review-summary.md`](evidence/blind-review-20260706/blind-review-summary.md)
