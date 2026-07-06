@@ -1,4 +1,4 @@
 interface:
-  display_name: "Downloaded PNG Instruction Intake"
-  short_description: "Find recent Downloads PNG instructions"
-  default_prompt: "Use $downloaded-png-instruction-intake to inspect the latest Downloads PNG for referenced instructions and return only relevant external text."
+  display_name: "Codex Reasoning Bug 512 Token"
+  short_description: "Find Codex reasoning bug screenshot text"
+  default_prompt: "Use $codex-reasoning-bug-512-token to inspect the latest Downloads PNG for Codex reasoning-bug instructions and return only relevant external text."
