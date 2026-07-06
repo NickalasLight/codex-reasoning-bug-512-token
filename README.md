@@ -138,6 +138,17 @@ Classification definitions:
 | after cutoff | 139 | 14 | 10 | 3 | 0 | 1 | 21.4% |
 | combined | 397 | 40 | 30 | 7 | 2 | 1 | 22.5% |
 
+#### Manual Review By Category
+
+| Category | Before Sampled | After Sampled | No | Probably | Yes | Unclear | Yes + Probably |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Routine progress/status or completed work | 20 | 10 | 30 | 0 | 0 | 0 | 0 |
+| Safety-critical or destructive operations | 1 | 3 | 0 | 4 | 0 | 0 | 4 |
+| Security, compliance, or secret-sensitive work | 3 | 0 | 0 | 3 | 0 | 0 | 3 |
+| Tooling/platform integration mistake or brittle orchestration | 2 | 0 | 0 | 0 | 2 | 0 | 2 |
+| Complex progress turn with insufficient local evidence | 0 | 1 | 0 | 0 | 0 | 1 | 0 |
+| **Total** | **26** | **14** | **30** | **7** | **2** | **1** | **9** |
+
 #### Categories Where More Reasoning Was Likely Useful
 
 | Category | Before | After | Total | Notes |
