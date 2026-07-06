@@ -1,0 +1,4 @@
+interface:
+  display_name: "Downloaded PNG Instruction Intake"
+  short_description: "Find recent Downloads PNG instructions"
+  default_prompt: "Use $downloaded-png-instruction-intake to inspect the latest Downloads PNG for referenced instructions and return only relevant external text."
