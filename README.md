@@ -48,6 +48,14 @@ Public reference artifact:
 
 - [`evidence/max-reasoning-intervention-20260706/manifest.json`](evidence/max-reasoning-intervention-20260706/manifest.json)
 
+Future analysis task now in progress:
+
+- Run normal Codex workflows for at least several hours after the cutoff before re-running transcript analysis.
+- Treat `2026-07-06T19:37:12Z` as the primary cutoff for the maximum-reasoning intervention.
+- Use `--phase-basis session` for the main before/after analysis because model-instructions changes are effectively session-scoped.
+- Compare post-intervention `gpt-5.5` reasoning-token behavior against the pre-intervention baseline: mean, median, distribution, exact 512-family cluster hits, cluster-hit rate, and model/effort breakdowns.
+- If clustered hits persist, run a follow-up qualitative audit on post-intervention hits using the existing blind-review packet and aggregation workflow.
+
 Recommended later analyzer command:
 
 ```powershell

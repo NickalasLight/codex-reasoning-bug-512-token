@@ -13,5 +13,18 @@
     "phase_basis": "session",
     "reason": "Codex model-instructions overrides are effectively session-scoped; sessions started before the cutoff may preserve earlier base instructions."
   },
+  "future_analysis_task": {
+    "status": "data_collection_in_progress",
+    "minimum_collection_window": "several hours of normal Codex workflows after the cutoff",
+    "primary_metrics": [
+      "mean_reasoning_output_tokens",
+      "median_reasoning_output_tokens",
+      "reasoning_token_distribution",
+      "exact_512_family_cluster_hits",
+      "cluster_hit_rate",
+      "model_and_effort_breakdowns"
+    ],
+    "follow_up_if_hits_persist": "Run qualitative audit on post-intervention clustered hits using the existing blind-review packet and aggregation workflow."
+  },
   "public_note": "The active local model-instructions override was updated with a Maximum Reasoning Intervention section. This manifest records only public-safe metadata and hashes, not the full local instruction file."
 }
