@@ -1,6 +1,6 @@
 # Codex 5.5 Reasoning-Token Collapse Evidence
 
-Public-safe aggregate evidence for a suspected Codex 5.5 reasoning collapse pattern where some turns terminate around exact 512-family reasoning-token counts.
+Public-safe aggregate evidence for a suspected Codex 5.5 reasoning collapse pattern where some turns terminate around exact 516-family reasoning-token counts.
 
 This repository intentionally avoids raw transcript disclosure. The evidence below is anonymized to aggregate usage metadata: model, phase, call count, reasoning-token counts, and exact cluster counts. It excludes user prompts, assistant responses, tool arguments, local usernames, private paths, and raw transcript lines.
 
