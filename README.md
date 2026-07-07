@@ -18,6 +18,11 @@ Public-safe aggregate evidence for a suspected Codex 5.5 reasoning collapse patt
 
 This repository intentionally avoids raw transcript disclosure. The evidence below is anonymized to aggregate usage metadata: model, phase, call count, reasoning-token counts, and exact cluster counts. It excludes user prompts, assistant responses, tool arguments, local usernames, private paths, and raw transcript lines.
 
+Contributor attribution and submission rules:
+
+- [`CREDITS.md`](CREDITS.md) is the rolling ground-truth contributor ledger.
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) documents public-safe evidence submission rules.
+
 ## Suspected Pattern
 
 Observed cluster values:
@@ -79,6 +84,23 @@ python .\scripts\analyze_reasoning_tokens.py `
   --phase-basis session `
   --out-dir "<local-output-dir>"
 ```
+
+## Independent Contributor Evidence
+
+Bozentan / Ilia contributed an independent local reproduction analysis in PR [#3](https://github.com/NickalasLight/codex-reasoning-bug-512-token/pull/3), preserved as a named public-safe artifact:
+
+- [`evidence/external/bozentan-independent-reproduction-20260707/`](evidence/external/bozentan-independent-reproduction-20260707/)
+
+Headline results from that contributor-reported, maintainer-reviewed artifact:
+
+| Check | Result |
+|---|---:|
+| Affected candy benchmark | 0/5 correct; all five wrong answers at 516 reasoning tokens |
+| Basic removal retest | 5/5 correct; no 512-family cluster hits |
+| Hardened override retest | 5/5 correct; no 512-family cluster hits |
+| Historical 516-task replay | 9 better, 1 similar, 0 worse |
+
+This strengthens the external reproduction signal, while keeping raw prompts, transcripts, tool outputs, local paths, usernames, secrets, and private repository details out of the public repo. The hardened `model_catalog_json` setup is contributor-reported and should be validated separately before being treated as a general recommendation.
 
 ## Historical Transcript Metadata Check
 
@@ -457,9 +479,10 @@ Current evidence suggests:
 2. Historical `gpt-5.5` turns still show exact 512-family reasoning-token hits after the update.
 3. Mean `gpt-5.5` reasoning-token usage did not materially change after the update.
 4. The fresh 5-shot benchmark did not reproduce the strict failure mode.
-5. Manual, rule-assisted, and blind multi-reviewer audits all fail to show a meaningful before/after improvement in concerning clustered hits.
-6. The blind multi-reviewer audit does not replicate the earlier rule-assisted category-shift signal.
-7. The remaining concern is normal agent turns that terminate at exact 512-family counts, especially where a fuller reasoning pass may have been needed to succeed.
+5. Independent contributor evidence from Bozentan / Ilia reports an affected benchmark batch with `0/5` correct and all five wrong answers at `516`, followed by clean removal and hardened-override retests.
+6. Manual, rule-assisted, and blind multi-reviewer audits all fail to show a meaningful before/after improvement in concerning clustered hits.
+7. The blind multi-reviewer audit does not replicate the earlier rule-assisted category-shift signal.
+8. The remaining concern is normal agent turns that terminate at exact 512-family counts, especially where a fuller reasoning pass may have been needed to succeed.
 
 ## Further Evidence Work
 

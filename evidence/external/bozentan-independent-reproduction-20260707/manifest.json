@@ -1,0 +1,31 @@
+{
+  "artifact": "bozentan-independent-reproduction-20260707",
+  "contributor_display": "Bozentan / Ilia",
+  "github_handle": "Bozentan",
+  "source_pr": "https://github.com/NickalasLight/codex-reasoning-bug-512-token/pull/3",
+  "source_commit": "020f0116c1ae7d15f4cf88efa4eebcfdbb1cff0d",
+  "source_commit_date_utc": "2026-07-06T23:59:40Z",
+  "artifact_date_utc": "2026-07-07",
+  "contribution_type": "independent_local_reproduction_analysis",
+  "review_status": "contributor_reported_maintainer_reviewed_public_safe_aggregate",
+  "privacy_status": {
+    "raw_prompts_included": false,
+    "raw_transcripts_included": false,
+    "tool_outputs_included": false,
+    "local_paths_included": false,
+    "usernames_or_private_contacts_included": false,
+    "secrets_included": false
+  },
+  "headline_findings": {
+    "affected_candy_benchmark": "0/5 correct; all five wrong answers at 516 reasoning output tokens",
+    "basic_removal_retest": "5/5 correct; no 512-family cluster hits",
+    "hardened_override_retest": "5/5 correct; no 512-family cluster hits",
+    "historical_task_replay": "9 better, 1 similar, 0 worse; no new exact 516 or 512-family hits across 10 replayed tasks"
+  },
+  "limitations": [
+    "One local install and one local transcript corpus.",
+    "Historical task replay was not an exact time-machine replay.",
+    "Quality comparison used final answers and token metadata only; hidden reasoning traces were unavailable.",
+    "Hardened catalog setup is contributor-reported and should be validated separately before being treated as a general recommendation."
+  ]
+}
