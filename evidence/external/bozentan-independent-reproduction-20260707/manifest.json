@@ -22,6 +22,7 @@
     "hardened_override_retest": "5/5 correct; no 512-family cluster hits",
     "historical_task_replay": "9 better, 1 similar, 0 worse; no new exact 516 or 512-family hits across 10 replayed tasks"
   },
+  "summary_interpretation": "Contributor evidence supports benchmark and selected replay-task improvement after removal or hardened override, but does not prove average ordinary-use reasoning allocation is fixed. Contributor-reported local aggregate metadata still shows low mean reasoning-token usage and persistent 512-family clustering in ordinary historical use.",
   "limitations": [
     "One local install and one local transcript corpus.",
     "Historical task replay was not an exact time-machine replay.",

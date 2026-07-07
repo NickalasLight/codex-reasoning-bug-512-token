@@ -13,6 +13,8 @@ This is a public-safe named external contribution artifact. It preserves Bozenta
 | Hardened override retest | 5/5 correct; no 512-family cluster hits |
 | Historical 516-task replay | 9 better, 1 similar, 0 worse |
 
+Summary interpretation: this contribution supports the narrower claim that the workaround can improve the affected benchmark and selected replayed tasks. It does not prove that ordinary agent-turn reasoning allocation is fixed on average; the same contributor-reported local metadata still shows low mean reasoning-token usage and persistent 512-family clustering in ordinary historical use.
+
 ## Affected-State Candy Benchmark
 
 The clearest preserved affected-state benchmark batch was a 5-shot run where all five attempts failed and all five landed on the exact clustered value:
@@ -150,6 +152,8 @@ The quality improvement was not only higher token usage. The replayed answers we
 ## Interpretation
 
 The strongest practical finding from this install is that the basic instruction-section removal can fix the benchmark, but durability matters. If Codex refreshes model/cache state and restores the final `Intermediary updates` section, affected behavior may return unless patched instructions are loaded from a durable startup source.
+
+This lines up with the broader project interpretation: benchmark/replay performance can improve while average ordinary-use reasoning-token behavior remains unresolved. The correct follow-up is therefore both benchmark retesting and aggregate transcript analysis over normal workflows.
 
 ## Limitations
 

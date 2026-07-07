@@ -1,24 +1,10 @@
 # Codex 5.5 Reasoning-Token Collapse Evidence
 
-## Contributing Analysis or Repo Updates
-
-Public pull requests are welcome. If you are not Nickalas Light and want to propose an update:
-
-1. Fork this repository and create a focused branch in your fork.
-2. Make the smallest reviewable change that captures your evidence, analysis, script fix, test, or documentation update.
-3. Do not commit raw private transcripts, prompts, assistant responses, tool arguments, local usernames, private paths, cookies, API keys, or customer/user data.
-4. Prefer public-safe aggregate evidence, anonymized tables, sanitized manifests, scripts, tests, or short reproducible notes.
-5. Include enough reproduction detail in the PR body: platform, Codex version if known, model, reasoning effort, command shape, JSONL/event fields inspected, and sanitized output or artifact paths.
-6. Run the relevant local tests or analyzer commands when possible. If you cannot run them, say exactly what was not run and why.
-7. Open the PR against `NickalasLight/codex-reasoning-bug-512-token:main`.
-
-You do not need direct write access to contribute. Maintainers will review public PRs before merging.
-
 Public-safe aggregate evidence for a suspected Codex 5.5 reasoning collapse pattern where some turns terminate around exact 512-family reasoning-token counts.
 
 This repository intentionally avoids raw transcript disclosure. The evidence below is anonymized to aggregate usage metadata: model, phase, call count, reasoning-token counts, and exact cluster counts. It excludes user prompts, assistant responses, tool arguments, local usernames, private paths, and raw transcript lines.
 
-Contributor attribution and submission rules:
+Contributions:
 
 - [`CREDITS.md`](CREDITS.md) is the rolling ground-truth contributor ledger.
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) documents public-safe evidence submission rules.
@@ -101,6 +87,8 @@ Headline results from that contributor-reported, maintainer-reviewed artifact:
 | Historical 516-task replay | 9 better, 1 similar, 0 worse |
 
 This strengthens the external reproduction signal, while keeping raw prompts, transcripts, tool outputs, local paths, usernames, secrets, and private repository details out of the public repo. The hardened `model_catalog_json` setup is contributor-reported and should be validated separately before being treated as a general recommendation.
+
+The contributor evidence matches the current working hypothesis: the workaround can materially improve the affected benchmark and selected replayed tasks, but aggregate ordinary-use metadata can still show low mean reasoning-token usage and persistent 512-family clustering. In other words, benchmark performance can improve without proving that average agent-turn reasoning allocation is fixed.
 
 ## Historical Transcript Metadata Check
 
@@ -479,7 +467,7 @@ Current evidence suggests:
 2. Historical `gpt-5.5` turns still show exact 512-family reasoning-token hits after the update.
 3. Mean `gpt-5.5` reasoning-token usage did not materially change after the update.
 4. The fresh 5-shot benchmark did not reproduce the strict failure mode.
-5. Independent contributor evidence from Bozentan / Ilia reports an affected benchmark batch with `0/5` correct and all five wrong answers at `516`, followed by clean removal and hardened-override retests.
+5. Independent contributor evidence from Bozentan / Ilia reports an affected benchmark batch with `0/5` correct and all five wrong answers at `516`, followed by clean removal and hardened-override retests. This supports benchmark-level improvement, not a broad claim that average ordinary-use reasoning allocation is fixed.
 6. Manual, rule-assisted, and blind multi-reviewer audits all fail to show a meaningful before/after improvement in concerning clustered hits.
 7. The blind multi-reviewer audit does not replicate the earlier rule-assisted category-shift signal.
 8. The remaining concern is normal agent turns that terminate at exact 512-family counts, especially where a fuller reasoning pass may have been needed to succeed.
